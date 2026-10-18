@@ -25,4 +25,35 @@ public class Aluno {
     @Embedded
     private Endereco endereco;
     private boolean ativo;
+
+    public void atualizarInformacoes(
+            String nome,
+            String email,
+            String telefone,
+            Endereco endereco) {
+        if (nome != null && !nome.isBlank()) {
+            this.nome = nome;
+        }
+        if (email != null && !email.isBlank()) {
+            this.email = email;
+        }
+        if (telefone != null && !telefone.isBlank()) {
+            this.telefone = telefone;
+        }
+        if (endereco != null) {
+            this.endereco.atualizarInformacoes(
+                    endereco.getLogradouro(),
+                    endereco.getNumero(),
+                    endereco.getComplemento(),
+                    endereco.getBairro(),
+                    endereco.getCidade(),
+                    endereco.getUf(),
+                    endereco.getCep()
+            );
+        }
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
 }

@@ -1,5 +1,7 @@
 package br.com.fiap3ess.autoescola3ess.application.core.domain;
 
+import br.com.fiap3ess.autoescola3ess.adapter.out.repository.entity.InstrutorEntity;
+import br.com.fiap3ess.autoescola3ess.shared.vo.enumeration.MotivoCancelamento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,8 +27,16 @@ public class Instrucao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instrutor_id")
-    private Instrutor instrutor;
+    private InstrutorEntity instrutor;
 
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
+
+    @Column(name = "motivo_cancelamento")
+    @Enumerated(EnumType.STRING)
+    private MotivoCancelamento motivoCancelamento;
+
+    public void cancelar(MotivoCancelamento motivo) {
+        this.motivoCancelamento = motivo;
+    }
 }

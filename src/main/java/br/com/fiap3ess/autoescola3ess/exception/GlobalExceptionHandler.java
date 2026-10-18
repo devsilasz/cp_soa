@@ -1,6 +1,8 @@
 package br.com.fiap3ess.autoescola3ess.exception;
 
+import br.com.fiap3ess.autoescola3ess.exception.type.AlunoNotFoundException;
 import br.com.fiap3ess.autoescola3ess.exception.type.InstrutorNotFoundException;
+import br.com.fiap3ess.autoescola3ess.exception.type.ValidacaoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InstrutorNotFoundException.class)
     public ResponseEntity<DadosErro> tratarInstrutorNotFound(InstrutorNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosErro(e.getMessage()));
+    }
+
+    @ExceptionHandler(AlunoNotFoundException.class)
+    public ResponseEntity<DadosErro> tratarAlunoNotFound(AlunoNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosErro(e.getMessage()));
+    }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<DadosErro> tratarValidacao(ValidacaoException e) {
+        return ResponseEntity.badRequest().body(new DadosErro(e.getMessage()));
     }
 
     private record DadosBadRequest(String campo, String mensagem) {

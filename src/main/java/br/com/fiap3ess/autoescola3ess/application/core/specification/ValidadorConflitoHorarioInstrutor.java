@@ -14,7 +14,7 @@ public class ValidadorConflitoHorarioInstrutor implements ValidadorAgendamento {
 
     @Override
     public void validar(DadosAgendamento dados) {
-        boolean instrutorOcupado = repository.existsByInstrutorIdAndDataHora(
+        boolean instrutorOcupado = repository.existsByInstrutorIdAndDataHoraAndMotivoCancelamentoIsNull(
                 dados.idInstrutor(),
                 dados.dataHora()
         );

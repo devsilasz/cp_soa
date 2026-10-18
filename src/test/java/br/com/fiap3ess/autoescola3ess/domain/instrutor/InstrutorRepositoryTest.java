@@ -1,5 +1,8 @@
 package br.com.fiap3ess.autoescola3ess.domain.instrutor;
 
+import br.com.fiap3ess.autoescola3ess.adapter.out.repository.InstrutorRepositoryImpl;
+import br.com.fiap3ess.autoescola3ess.adapter.out.repository.entity.InstrutorEntity;
+import br.com.fiap3ess.autoescola3ess.adapter.out.repository.mapper.InstrutorEntityMapper;
 import br.com.fiap3ess.autoescola3ess.application.core.domain.Instrucao;
 import br.com.fiap3ess.autoescola3ess.application.core.domain.Aluno;
 import br.com.fiap3ess.autoescola3ess.shared.vo.endereco.Endereco;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.DayOfWeek;
@@ -23,6 +27,7 @@ import static org.assertj.core.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
+@Import({InstrutorRepositoryImpl.class, InstrutorEntityMapper.class})
 public class InstrutorRepositoryTest {
     @Autowired
     InstrutorRepository repository;
@@ -45,7 +50,7 @@ public class InstrutorRepositoryTest {
         Aluno aluno = cadastrarAluno();
 
         //cadastar instrutor
-        Instrutor instrutor = cadastrarInstrutor();
+        InstrutorEntity instrutor = cadastrarInstrutor();
 
         //agendar instrução
         agendarInstrucao(aluno, instrutor, proximaSegundaAs10);
@@ -71,7 +76,7 @@ public class InstrutorRepositoryTest {
                 .withNano(0);
 
         //cadastar instrutor
-        Instrutor instrutor = cadastrarInstrutor();
+        InstrutorEntity instrutor = cadastrarInstrutor();
 
         //act or when
         Instrutor instrutorDisponivel = repository.escolherInstrutorAleatorioDisponivel(
@@ -79,7 +84,7 @@ public class InstrutorRepositoryTest {
                 proximaSegundaAs10
         );
         //assert or then
-        assertThat(instrutorDisponivel).isEqualTo(instrutor);
+        assertThat(instrutorDisponivel.getId()).isEqualTo(instrutor.getId());
     }
 
     private Endereco dadosEndereco() {
@@ -108,8 +113,8 @@ public class InstrutorRepositoryTest {
         return aluno;
     }
 
-    private Instrutor cadastrarInstrutor() {
-        Instrutor instrutor = new Instrutor(
+    private InstrutorEntity cadastrarInstrutor() {
+        InstrutorEntity instrutor = new InstrutorEntity(
                 null,
                 "Instrutor Teste",
                 "instrutorteste@email.com.br",
@@ -125,13 +130,14 @@ public class InstrutorRepositoryTest {
 
     private void agendarInstrucao(
             Aluno aluno,
-            Instrutor instrutor,
+            InstrutorEntity instrutor,
             LocalDateTime dataHora) {
         Instrucao instrucao = new Instrucao(
                 null,
                 aluno,
                 instrutor,
-                dataHora
+                dataHora,
+                null
         );
         testEntity.persist(instrucao);
     }

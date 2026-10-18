@@ -1,8 +1,11 @@
 package br.com.fiap3ess.autoescola3ess.application.service;
 
 import br.com.fiap3ess.autoescola3ess.adapter.in.controller.request.instrucao.DadosAgendamento;
+import br.com.fiap3ess.autoescola3ess.adapter.in.controller.request.instrucao.DadosCancelamento;
 import br.com.fiap3ess.autoescola3ess.adapter.in.controller.response.instrucao.DadosDetalhamentoAgendamento;
+import br.com.fiap3ess.autoescola3ess.adapter.out.repository.mapper.InstrutorEntityMapper;
 import br.com.fiap3ess.autoescola3ess.application.core.domain.Instrucao;
+import br.com.fiap3ess.autoescola3ess.application.core.specification.contract.ValidadorCancelamento;
 import br.com.fiap3ess.autoescola3ess.application.port.out.InstrucaoRepository;
 import br.com.fiap3ess.autoescola3ess.exception.type.ValidacaoException;
 import br.com.fiap3ess.autoescola3ess.application.core.specification.contract.ValidadorAgendamento;
@@ -13,7 +16,6 @@ import br.com.fiap3ess.autoescola3ess.application.core.domain.Instrutor;
 import br.com.fiap3ess.autoescola3ess.exception.type.InstrutorNotFoundException;
 import br.com.fiap3ess.autoescola3ess.application.port.out.InstrutorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,9 @@ public class AgendaDeInstrucoes {
     private final AlunoRepository alunoRepository;
     private final InstrutorRepository instrutorRepository;
     private final InstrucaoRepository repository;
+    private final InstrutorEntityMapper instrutorEntityMapper;
     private final List<ValidadorAgendamento> validadoresAgendamento;
+    private final List<ValidadorCancelamento> validadoresCancelamento;
 
     @Transactional
     public DadosDetalhamentoAgendamento agendar(DadosAgendamento dados) {
@@ -45,9 +49,27 @@ public class AgendaDeInstrucoes {
             throw new ValidacaoException("Nenhum instrutor disponível para a data/hora informada!");
         }
 
-        Instrucao instrucao = new Instrucao(null, aluno, instrutor, dados.dataHora());
+        Instrucao instrucao = new Instrucao(
+                null,
+                aluno,
+                instrutorEntityMapper.toEntity(instrutor),
+                dados.dataHora(),
+                null
+        );
         Instrucao salva = repository.save(instrucao);
         return new DadosDetalhamentoAgendamento(salva);
+    }
+
+    @Transactional
+    public void cancelar(DadosCancelamento dados) {
+        if (!repository.existsById(dados.idInstrucao())) {
+            throw new ValidacaoException("ID da instrução informado não existe!");
+        }
+        //Validações
+        validadoresCancelamento.forEach(validador -> validador.validar(dados));
+
+        Instrucao instrucao = repository.getReferenceById(dados.idInstrucao());
+        instrucao.cancelar(dados.motivo());
     }
 
     private Instrutor escolherInstrutor(DadosAgendamento dados) {

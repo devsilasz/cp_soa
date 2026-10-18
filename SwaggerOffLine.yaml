@@ -1,7 +1,8 @@
 openapi: 3.1.0
 info:
   title: Auto Escola 3ESS
-  description: API REST para sistema de gerenciamento de instruções da Auto Escola 3ESS.
+  description: API REST para sistema de gerenciamento de instruções da Auto Escola
+    3ESS.
   contact:
     name: Auto Escola 3ESS
     email: autoescola3ess@email.com.br
@@ -9,55 +10,55 @@ info:
     name: Apache 2.0
     url: http://springdoc.org
 servers:
-  - url: http://localhost:8080
-    description: Generated server url
+- url: http://localhost:8080
+  description: Generated server url
 paths:
   /instrutores:
     get:
       tags:
-        - instrutor-controller
-      operationId: listarInstrutores
+      - instrutor-controller
+      operationId: listar
       parameters:
-        - name: page
-          in: query
-          description: Zero-based page index (0..N)
-          required: false
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
-        - name: size
-          in: query
-          description: The size of the page to be returned
-          required: false
-          schema:
-            type: integer
-            default: 10
-            minimum: 1
-        - name: sort
-          in: query
-          description: "Sorting criteria in the format: property,(asc|desc). Default sort
-            order is ascending. Multiple sort criteria are supported."
-          required: false
-          schema:
-            type: array
-            default:
-              - nome,ASC
-            items:
-              type: string
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          default:
+          - "nome,ASC"
+          items:
+            type: string
       responses:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/PageDadosListagemInstrutor"
       security:
-        - bearer-key: []
+      - bearer-key: []
     put:
       tags:
-        - instrutor-controller
-      operationId: atualizarInstrutor
+      - instrutor-controller
+      operationId: atualizar
       requestBody:
         content:
           application/json:
@@ -68,15 +69,15 @@ paths:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/DadosDetalhamentoInstrutor"
       security:
-        - bearer-key: []
+      - bearer-key: []
     post:
       tags:
-        - instrutor-controller
-      operationId: cadastrarInstrutor
+      - instrutor-controller
+      operationId: cadastrar
       requestBody:
         content:
           application/json:
@@ -87,15 +88,95 @@ paths:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/DadosDetalhamentoInstrutor"
       security:
-        - bearer-key: []
+      - bearer-key: []
+  /alunos:
+    get:
+      tags:
+      - aluno-controller
+      operationId: listar_1
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          default:
+          - "nome,ASC"
+          items:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageDadosListagemAluno"
+      security:
+      - bearer-key: []
+    put:
+      tags:
+      - aluno-controller
+      operationId: atualizar_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DadosAtualizacaoAluno"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DadosDetalhamentoAluno"
+      security:
+      - bearer-key: []
+    post:
+      tags:
+      - aluno-controller
+      operationId: cadastrar_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DadosCadastroAluno"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DadosDetalhamentoAluno"
+      security:
+      - bearer-key: []
   /login:
     post:
       tags:
-        - login-controller
+      - login-controller
       operationId: efetuarLogin
       requestBody:
         content:
@@ -107,13 +188,13 @@ paths:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/DadosTokenJWT"
   /instrucoes:
     post:
       tags:
-        - instrucao-controller
+      - instrucao-controller
       operationId: agendarInstrucao
       requestBody:
         content:
@@ -125,58 +206,132 @@ paths:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/DadosDetalhamentoAgendamento"
+      security:
+      - bearer-key: []
+    delete:
+      tags:
+      - instrucao-controller
+      operationId: cancelarInstrucao
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DadosCancelamento"
+        required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearer-key: []
   /instrutores/{id}:
     get:
       tags:
-        - instrutor-controller
-      operationId: detalharInstrutor
+      - instrutor-controller
+      operationId: detalhar
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 $ref: "#/components/schemas/DadosDetalhamentoInstrutor"
       security:
-        - bearer-key: []
+      - bearer-key: []
     delete:
       tags:
-        - instrutor-controller
-      operationId: excluirInstrutor
+      - instrutor-controller
+      operationId: excluir
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         "200":
           description: OK
       security:
-        - bearer-key: []
+      - bearer-key: []
   /health-check:
     get:
       tags:
-        - health-check-controller
+      - health-check-controller
       operationId: healthCheck
       responses:
         "200":
           description: OK
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: string
+  /enderecos/{cep}:
+    get:
+      tags:
+      - endereco-controller
+      operationId: buscarPorCep
+      parameters:
+      - name: cep
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DadosEndereco"
+      security:
+      - bearer-key: []
+  /alunos/{id}:
+    get:
+      tags:
+      - aluno-controller
+      operationId: detalhar_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DadosDetalhamentoAluno"
+      security:
+      - bearer-key: []
+    delete:
+      tags:
+      - aluno-controller
+      operationId: excluir_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearer-key: []
 components:
   schemas:
     DadosAtualizacaoInstrutor:
@@ -194,14 +349,14 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
         endereco:
           $ref: "#/components/schemas/DadosEndereco"
       required:
-        - id
+      - id
     DadosEndereco:
       type: object
       properties:
@@ -225,13 +380,13 @@ components:
         cep:
           type: string
           minLength: 1
-          pattern: \d{5}-\d{3}
+          pattern: "\\d{5}-\\d{3}"
       required:
-        - bairro
-        - cep
-        - cidade
-        - logradouro
-        - uf
+      - bairro
+      - cep
+      - cidade
+      - logradouro
+      - uf
     DadosDetalhamentoInstrutor:
       type: object
       properties:
@@ -249,10 +404,44 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
+        endereco:
+          $ref: "#/components/schemas/DadosEndereco"
+        ativo:
+          type: boolean
+    DadosAtualizacaoAluno:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        telefone:
+          type: string
+        endereco:
+          $ref: "#/components/schemas/DadosEndereco"
+      required:
+      - id
+    DadosDetalhamentoAluno:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        telefone:
+          type: string
+        cpf:
+          type: string
         endereco:
           $ref: "#/components/schemas/DadosEndereco"
         ativo:
@@ -267,8 +456,8 @@ components:
           type: string
           minLength: 1
       required:
-        - login
-        - senha
+      - login
+      - senha
     DadosTokenJWT:
       type: object
       properties:
@@ -294,18 +483,18 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
         endereco:
           $ref: "#/components/schemas/DadosEndereco"
       required:
-        - cnh
-        - email
-        - especialidade
-        - nome
-        - telefone
+      - cnh
+      - email
+      - especialidade
+      - nome
+      - telefone
     DadosAgendamento:
       type: object
       properties:
@@ -318,16 +507,16 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
         data_hora:
           type: string
           format: date-time
       required:
-        - data_hora
-        - id_aluno
+      - data_hora
+      - id_aluno
     DadosDetalhamentoAgendamento:
       type: object
       properties:
@@ -341,13 +530,38 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
         data_hora:
           type: string
           format: date-time
+    DadosCadastroAluno:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+          minLength: 1
+        telefone:
+          type: string
+          minLength: 1
+        cpf:
+          type: string
+          minLength: 1
+          pattern: "\\d{11}"
+        endereco:
+          $ref: "#/components/schemas/DadosEndereco"
+      required:
+      - cpf
+      - email
+      - endereco
+      - nome
+      - telefone
     DadosListagemInstrutor:
       type: object
       properties:
@@ -361,10 +575,10 @@ components:
         especialidade:
           type: string
           enum:
-            - MOTOS
-            - CARROS
-            - VANS
-            - CAMINHOES
+          - MOTOS
+          - CARROS
+          - VANS
+          - CAMINHOES
     PageDadosListagemInstrutor:
       type: object
       properties:
@@ -400,10 +614,7 @@ components:
     PageableObject:
       type: object
       properties:
-        offset:
-          type: integer
-          format: int64
-        unpaged:
+        paged:
           type: boolean
         pageNumber:
           type: integer
@@ -411,19 +622,81 @@ components:
         pageSize:
           type: integer
           format: int32
-        paged:
-          type: boolean
         sort:
           $ref: "#/components/schemas/SortObject"
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
     SortObject:
       type: object
       properties:
-        empty:
+        unsorted:
           type: boolean
         sorted:
           type: boolean
-        unsorted:
+        empty:
           type: boolean
+    DadosListagemAluno:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+    PageDadosListagemAluno:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/DadosListagemAluno"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    DadosCancelamento:
+      type: object
+      properties:
+        id_instrucao:
+          type: integer
+          format: int64
+        motivo:
+          type: string
+          enum:
+          - ALUNO_DESISTIU
+          - INSTRUTOR_CANCELOU
+          - OUTROS
+      required:
+      - id_instrucao
+      - motivo
   securitySchemes:
     bearer-key:
       type: http

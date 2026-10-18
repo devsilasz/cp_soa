@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnderecoMapper {
     public Endereco toVo(DadosEndereco dados) {
+        if (dados == null) {
+            return null;
+        }
         return new Endereco(
                 dados.logradouro(),
                 dados.numero(),

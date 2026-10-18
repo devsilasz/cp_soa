@@ -28,6 +28,9 @@ public class InstrutorRepositoryImpl implements InstrutorRepository {
     @Override
     public Instrutor escolherInstrutorAleatorioDisponivel(Especialidade especialidade, LocalDateTime dataHora) {
         InstrutorEntity entity = jpaRepository.escolherInstrutorAleatorioDisponivel(especialidade, dataHora);
+        if (entity == null) {
+            return null;
+        }
         return entityMapper.toDomain(entity);
     }
 
